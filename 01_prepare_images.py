@@ -9,7 +9,7 @@ import piexif
 logging.basicConfig(filename='process_images.log', level=logging.ERROR)
 
 # Load the shapefile
-shapefile_path = "Shoreline_DB\\GOC_NESP-4-13_JCU_AerialSurveys_2017_2019_Shoreline_DB.shp"
+shapefile_path = "..\\derived\\Shoreline_DB\\GOC_NESP-4-13_JCU_AerialSurveys_2017_2019_Shoreline_DB.shp"
 print("Reading Shoreline_DB")
 df = gpd.read_file(shapefile_path)
 
