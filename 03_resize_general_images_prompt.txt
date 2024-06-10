@@ -1,0 +1,44 @@
+
+Objective:
+Create a Python script to downsample JPEG images from two specified directories (each with potential subfolders) and store the resized images in new directories while preserving the subfolder structure. The resized images should retain all original EXIF data with an additional user comment.
+
+Input Directories:
+- F:\Norm\4.13_Assessing Gulf mangrove dieback\Gulf_Aerial_Survey_2017\0_general images
+- F:\Norm\4.13_Assessing Gulf mangrove dieback\Gulf_Aerial_Survey_2019\0_general images
+
+Output Directories:
+- ..\public\images\2017_general_images
+- ..\public\images\2019_general_images
+
+Image Processing:
+- Resize images to a maximum of 3600 x 2391 pixels.
+- Use LANCZOS resampling.
+- Save the resized images with 85 JPEG quality.
+- Preserve the aspect ratio of the original images.
+- Use the same output filename as the input filename.
+
+EXIF Data:
+- Copy all EXIF data from the original images to the resized images.
+- Set the user comment field in EXIF to: "This image is downscaled from the original photo. From dataset https://doi.org/10.26274/1ef5-4147".
+- Handle the case when an image does not already have EXIF data.
+- Don't assume that piexif.helper is available.
+
+Additional Requirements:
+- The script should create the output directories if they do not already exist.
+- Maintain the subfolder structure from the input directories in the output directories.
+- Include error handling for missing files, permission errors, unsupported file formats, etc.
+- Log progress to standard out.
+- Use necessary libraries such as PIL or Pillow for image processing and piexif for handling EXIF data.
+- The script should include print statements to show frequent processing progress. It should have one at the start and one at the end.
+- The script should indicate the fraction of images that have been processed, such as 'Processing 1 of 1000 images'
+- If non JPEG files are encountered, they should be copied over 'as is'.
+- Code readibility is a high priority
+
+Execution:
+The script should run standalone.
+
+Please review the above description for the creation of a python script to identify any areas that are ambiguous and need clearer specification. There is no need to output the Python.
+
+Please plan the code then generate it.
+
+The progress total_files only considered the number of files in the local subfolder and so doesn't provide an indicate the total_files to be processed. Within process_directory can it first look through the files to count how many files it needs to process to get a better estimate of total_files.

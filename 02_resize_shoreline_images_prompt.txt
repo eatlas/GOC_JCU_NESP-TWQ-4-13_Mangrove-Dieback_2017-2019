@@ -1,0 +1,51 @@
+Create a Python script to process shoreline images from two aerial surveys conducted in 2017 and 2019. The script should achieve the following:
+
+Load Shapefile: Read a shapefile containing shoreline data from the path "..\\public\\Shoreline_DB\\GOC_NESP-4-13_JCU_AerialSurveys_2017_2019_Shoreline_DB.shp" also referred to as Shoreline_DB
+
+This database corresponds to one row per survey location, each of which is assigned an identifier Shore_FID. Each Shore_FID has a corresponding location (Shore_X and Shore_Y). 
+
+This file has attributes '2017_Image' and '2019_Image' that correspond to the filenames of images that we will be processing. For example for 2017_Image: 1_2017_11_GOC_3978.JPG. Where an image is not available for a particular year then 2017_Image or 2019_Image is Null.
+
+The path for the '2017_Image' source images is 'D:\Norm\4.13_Assessing Gulf mangrove dieback\Gulf_Aerial_Survey_2017\2017_Shoreline_Images' and the path for the '2019_Image' images is 'D:\Norm\4.13_Assessing Gulf mangrove dieback\Gulf_Aerial_Survey_2019\2019_Shoreline_Images', these correspond to surveys from the 2017 and 2019 years respectively.
+
+The first stage should identify if there are any discrepancies between the predicted file names from GOC_NESP-4-13_JCU_AerialSurveys_2017_2019_Shoreline_DB and the actual images on disk. These should be checked and any missing images reported to the screen. This should be done before the main processing of images. The script should stop at then end of this check if there are discrepencies.
+
+The overall goal is to resize and compress the input images and to file them into output folders grouped by Shore_FID in increments of 250. In the Shoreline_DB there is an attribute 'GroupRange' that corresponds to grouping of the images. Examples of GroupRange: '1-250','251-500'. GroupRange is a string. GroupRange has already been computed and is an attribute of Shoreline_DB.
+
+For each of the input images create a resized version with a maximum of 3600 x 2391 that is resized using LANCZOS resampling and 85 JPEG quality. The resize is to fit in these bounds, preserving the aspect ratio of the original image.
+
+The resized version of the images should copy the EXIF data of the original image. All EXIF fields should be copied. Use piexif for this task. The EXIF of the new image should have the user comment field set to the string: "This image is downscaled from the original photo. From dataset https://doi.org/10.26274/1ef5-4147".
+
+The base output directories for 2017 and 2019 images are '../public/images/2017_Shoreline/' and '../public/images/2019_Shoreline/'.
+
+Each image has been assigned a GroupRange. The resized images should be saved in a folder '{base output directory}/{GroupRange}/{image_filename}' where image_filename corresponds to the file in the 2017_image attribute for the 2017 data and 2019_image attribute for 2019.
+
+As there are some missing Shore_FID not all GroupRange have an equal number of rows. The images should be grouped by their GroupRange attribute and sorted but Shore_FID. The mid element of this group should be determined as the mid row within each group. This row should be used to determin the centroid of the group to substitute into the interactive map link.
+
+In each GroupRange directory the script should generate a 'readme.md' file with the following text:
+'Where are these photos? View this group of photos on an [interactive map](https://maps.eatlas.org.au/index.html?intro=false&z=13&ll={longitude},{latitude}&l0=ea_nesp4%3AGOC_NESP-4-13_JCU_AerialSurveys_2017_2019_Shoreline_DB,ea_ea-be%3AWorld_Bright-Earth-e-Atlas-basemap,google_HYBRID,google_TERRAIN,ea_nesp-mac-3%3AAU_NESP-MaC-3-17_AIMS_S2-comp_low-tide_p30-trueColour&v0=,f,,f)
+Imagery from [Gulf of Carpentaria Mangrove Aerial Shoreline Surveys 2017 & 2019](https://doi.org/10.26274/1ef5-4147)'
+Where the {longitude} and {latitude} in the interactive map link are replaced with the Shore_X and Shore_Y of the row corresponding to the mid point in the group.
+
+The script should check if the output image already exists. If so then it should skip the processing for that image and output a message indicating that it skipped the file.
+
+The script should handle errors gracefully, logging any issues encountered during the processing of images. The errors can be logged to the screen.
+
+Can you make sure the script generates the output directory if needed.
+
+Can you add extensive print statements to show progress through the script, including one right at the start and one at the end. In the main processing loop it should print out a count of images processed (something like: 1 of 19500), once per image processed. 
+
+The script should perform the discrepancy check at the start in a single thread. It should then split the work into two threads, one for processing 2017 images and one for processing 2019 images. Within each of the two threads the images will be processed sequentially. Processing progress should be output for every image that is processed. 
+
+If an image is smaller than 3600 x 2391 then it should be copied with no modification (no changes to EXIF needed).
+
+
+Please review the above description for the creation of a python script to identify any areas that are ambiguous and need clearer specification. There is no need to output the Python.
+
+
+Please plan the code then generate it.
+
+
+Follow up:
+In the discrepancy check, have the script output a progress indication every 500 images processed.
+
